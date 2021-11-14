@@ -10,6 +10,8 @@ library(tidyverse)
 library(rvest)
 ```
 
+
+
 ```{r}
 x_vec = rnorm(25, mean = 5, sd = 3)
 
