@@ -43,6 +43,7 @@ l = list(
 l
 
 l[1]
+l[[1]]
 l[["summary"]]
 l$summary
 ```
@@ -80,7 +81,11 @@ output = map(list_norms, mean_and_sd)
 
 output = map(list_norms, summary)
 
+map(list_norms, median)
+
 output = map_dbl(list_norms, median)
+
+map_df(list_norms, mean_and_sd, .id = "input")
 ```
 
 ## List collumns!!
@@ -103,6 +108,10 @@ mean_and_sd(listcol_df$norms[[1]])
 listcol_df %>% 
   mutate(summaries = map(norms, mean_and_sd)) %>% 
   pull(summaries)
+
+  listcol_df %>% 
+  mutate(summaries = map(norms, mean_and_sd),
+         medians = map_dbl(norms, median))
 ```
 
 ## Nested data
@@ -143,8 +152,14 @@ weather_lm(weather_nested$data[[1]])
 map(weather_nested$data, weather_lm)
 
 weather_nested %>%
-  mutate(lm_resutlt = map(data, weather_lm))
-  
+  mutate(lm_result = map(data, weather_lm)) %>% 
+  pull(lm_result)
+
+output = vector("list", 3)
+
+for (i in 1:3){ 
+  output[[i]] = weather_lm(weather_nested$data[[i]])
+}
 ```
 
 ```{r}
@@ -179,7 +194,7 @@ vec_urls = str_c(url_base, 1:5)
 
 napolean_df = 
   tibble(
-    urls = urls
+    urls = vec_urls
   )
 
 napolean_df %>% 
